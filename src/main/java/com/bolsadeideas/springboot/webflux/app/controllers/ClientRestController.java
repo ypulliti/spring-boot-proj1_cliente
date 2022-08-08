@@ -19,6 +19,7 @@ public class ClientRestController
 {
 	@Autowired
 	private BankClientDao daoC;
+	private ClientController cControl = new ClientController();
 	private static final Logger log = LoggerFactory.getLogger(ClientRestController.class);
 	
 	@GetMapping("showClients")
@@ -48,20 +49,44 @@ public class ClientRestController
 		return producto;
 	}
 
-	@PutMapping("insertClient/{nombre}/{tipoCliente}/{nombreCuentaBancaria}/{tipoCuentaBancaria}")
+	@PutMapping("insertClient/{id}/{nombre}/{tipoCliente}/{nombreCuentaBancaria}/{tipoCuentaBancaria}")
 	public String insertClient(@PathVariable String nombre, @PathVariable String tipoCliente, @PathVariable String nombreCuentaBancaria, @PathVariable String tipoCuentaBancaria)
 	{
 		PersonalBankAccount pBcount = new PersonalBankAccount(nombreCuentaBancaria, tipoCuentaBancaria);
 		BankClient bClient = new BankClient(nombre, tipoCliente, pBcount);
 
-		Flux.just(bClient)
+		cControl.updatePerson(bClient);
+
+		/*Flux.just(bClient)
 				.flatMap(c -> {
 					c.setCreateAt(new Date());
 					return daoC.save(c);
 				})
 				.subscribe(c -> log.info("Insert: " + c.getId() + " " + c.getName()));
+		*/
+		return "Sucess";
+	}
+
+	@PutMapping("updateClient/{id}/{nombre}/{tipoCliente}/{nombreCuentaBancaria}/{tipoCuentaBancaria}")
+	public String updateClient(@PathVariable String id, @PathVariable String nombre, @PathVariable String tipoCliente, @PathVariable String nombreCuentaBancaria, @PathVariable String tipoCuentaBancaria)
+	{
+		PersonalBankAccount pBcount = new PersonalBankAccount(nombreCuentaBancaria, tipoCuentaBancaria);
+		BankClient bClient = new BankClient(nombre, tipoCliente, id, pBcount);
+		cControl.updatePerson(bClient);
+		/*Flux.just(bClient)
+				.flatMap(c -> {
+					c.setCreateAt(new Date());
+					return daoC.save(c);
+				})
+				.subscribe(c -> log.info("Insert: " + c.getId() + " " + c.getName()));*/
 
 		return "Sucess";
 	}
 
+	@PutMapping("deleteClient/{id}")
+	public String deleteClient(@PathVariable String id)
+	{
+		cControl.deletePerson(id);
+		return "Sucess";
+	}
 }

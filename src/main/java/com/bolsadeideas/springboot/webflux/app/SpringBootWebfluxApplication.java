@@ -32,7 +32,7 @@ public class SpringBootWebfluxApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception
 	{
-		mongoTemplate.dropCollection("bankclients").subscribe();
+		mongoTemplate.dropCollection("clients").subscribe();
 		
 		Flux.just(new BankClient("Test01", "personal", "1", null),
 				new BankClient("Test01", "empresarial", "2", null)
