@@ -1,10 +1,12 @@
 package com.bolsadeideas.springboot.webflux.app.models.documents;
 
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
+@Data
 @Document(collection="clients")
 public class BankClient
 {
@@ -14,45 +16,21 @@ public class BankClient
 	private String typeClient;
 	private Date createAt;
 
-	private PersonalBankAccount bankAccount;
+	private String[] bankAccounts;
 
 	public BankClient() {}
 
-	public BankClient(String nombre, String tipoClient, PersonalBankAccount bankAccount) {
+	public BankClient(String nombre, String tipoClient, String[] bankAccount) {
 		this.name = nombre;
 		this.typeClient = tipoClient;
-		this.bankAccount = bankAccount;
+		this.bankAccounts = bankAccount;
 	}
 
-	public BankClient(String nombre, String tipoClient, String id, PersonalBankAccount bankAccount) {
+	public BankClient(String nombre, String tipoClient, String id, String bankAccount) {
 		this.name = nombre;
 		this.typeClient = tipoClient;
 		this.id = id;
-		this.bankAccount = bankAccount;
+		this.bankAccounts = new String[] { bankAccount };
 	}
-	
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getTypeClient() {
-		return typeClient;
-	}
-	public void setTypeClient(String typeClient) {
-		this.typeClient = typeClient;
-	}
-	public Date getCreateAt() {
-		return createAt;
-	}
-	public void setCreateAt(Date createAt) {
-		this.createAt = createAt;
-	}
+
 }

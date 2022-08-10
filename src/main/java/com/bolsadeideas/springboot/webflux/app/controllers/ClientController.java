@@ -5,8 +5,12 @@ import com.bolsadeideas.springboot.webflux.app.models.documents.BankClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+@Controller
 public class ClientController
 {
     @Autowired
@@ -14,20 +18,17 @@ public class ClientController
     private static final Logger log = LoggerFactory.getLogger(ClientRestController.class);
 
     public Mono<BankClient> getPerson(final String id){
-        return this.daoC.findById(id);
+
+        return daoC.findById(id);
     }
 
-    public Mono<BankClient> savePerson(BankClient person){
-        return this.daoC.save(person);
+    public void savePerson(BankClient person)
+    {
+        daoC.save(person).subscribe();
     }
 
-    public Mono<BankClient> updatePerson(BankClient person){
-        return this.daoC.findById(person.getId())
-                .map(p -> person)
-                .flatMap(this.daoC::save);
-    }
-
-    public Mono<Void> deletePerson(final String id){
-        return this.daoC.deleteById(id);
+    public void deletePerson(final String id)
+    {
+        daoC.deleteById(id).subscribe();
     }
 }
